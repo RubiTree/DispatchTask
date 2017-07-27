@@ -20,7 +20,7 @@ function initTasksData(tasksText) {
     // }
     for (var i = 0; i < taskStringList.length; i++) {
         var splitedTaskString = taskStringList[i].split(" ");
-        leftTaskList.push(new Task(splitedTaskString[0], splitedTaskString[1]));
+        leftTaskList.push(new Task(splitedTaskString[0], parseInt(splitedTaskString[1])));
     }
 }
 
@@ -28,14 +28,14 @@ function renderTaskGroup(taskGroup) {
     var container = document.getElementById('task');
     // container.remove
     for (var i = 0; i < taskGroup.length; i++) {
-        var child = document.createElement('p');
+        var child = document.createElement('div');
 
         var ownerName = "";
         if(taskGroup[i].owner!==null){
             ownerName = taskGroup[i].owner.name;
         }
-        child.innerHTML = taskGroup[i].name + ":" + taskGroup[i].hour + "h -> " + ownerName;
-        child.style.padding = 5;
+        child.innerHTML = taskGroup[i].name + " : " + taskGroup[i].hour + "h -> " + ownerName;
+        child.style.padding = 15;
 
         child.onmouseover = function () {
             // 用this而不是child，否则会绑定成最后一个
@@ -47,22 +47,24 @@ function renderTaskGroup(taskGroup) {
             }
         };
 
-        child.onclick = function () {
-            if (isOnSelect) {
-                if (currentChooseCoder !== null) {
-                    if (contains(leftTaskList, taskGroup[i])) {
-                        leftTaskList = removeByObj(leftTaskList, taskGroup[i]);
+        child.onclick = (function (inner_i,inner_child) {
+            return function () {
+                if (isOnSelect) {
+                    if (currentChooseCoder !== null) {
+                        if (contains(leftTaskList, taskGroup[inner_i])) {
+                            removeByObj(leftTaskList, taskGroup[inner_i]);
+                        }
+                        currentChooseCoder.bind(taskGroup[inner_i]);
                     }
-                    currentChooseCoder.bind(taskGroup[i]);
+                    exitSelectMode();
+                    update();
+                } else {
+                    isOnSelect = true;
+                    currentChooseTask = taskGroup[inner_i];
+                    inner_child.style.backgroundColor = 'red';
                 }
-                exitSelectMode();
-                update();
-            } else {
-                isOnSelect = true;
-                currentChooseTask = taskGroup[i];
-                this.style.backgroundColor = 'red';
             }
-        };
+        }(i,child));
 
         container.appendChild(child);
     }
@@ -85,9 +87,9 @@ function initCodersData(codersText) {
 function renderCoders() {
     var container = document.getElementById('coder');
     for (var i = 0; i < coderList.length; i++) {
-        var child = document.createElement('p');
-        child.innerHTML = coderList[i].name + ":" + coderList[i].getAllTime() + "h";
-        child.style.padding = 5;
+        var child = document.createElement('div');
+        child.innerHTML = coderList[i].name + " : " + coderList[i].getAllTime() + "h";
+        child.style.padding = 15;
 
         child.onmouseover = function () {
             // 用this而不是child，否则会绑定成最后一个
@@ -99,22 +101,24 @@ function renderCoders() {
             }
         };
 
-        child.onclick = function () {
-            if (isOnSelect) {
-                if (currentChooseTask !== null) {
-                    if (contains(leftTaskList, currentChooseTask)) {
-                        leftTaskList = removeByObj(leftTaskList, currentChooseTask);
+        child.onclick = (function (inner_i,inner_child) {
+            return function () {
+                if (isOnSelect) {
+                    if (currentChooseTask !== null) {
+                        if (contains(leftTaskList, currentChooseTask)) {
+                            removeByObj(leftTaskList, currentChooseTask);
+                        }
+                        currentChooseTask.bind(coderList[inner_i]);
                     }
-                    currentChooseTask.bind(coderList[i]);
+                    exitSelectMode();
+                    update();
+                } else {
+                    isOnSelect = true;
+                    currentChooseCoder = coderList[inner_i];
+                    inner_child.style.backgroundColor = 'red';
                 }
-                exitSelectMode();
-                update();
-            } else {
-                isOnSelect = true;
-                currentChooseCoder = coderList[i];
-                this.style.backgroundColor = 'red';
             }
-        };
+        }(i,child));
 
         container.appendChild(child);
     }
@@ -135,22 +139,19 @@ function update() {
     // }
 
     removeAllChildren('coder');
-    renderCoders();
-
     removeAllChildren('task');
+
+    renderCoders();
     renderTasks();
 }
 
 function removeAllChildren(containerName) {
     var container = document.getElementById(containerName);
     var childNodes = container.childNodes;
-    for (var i = 0; i < childNodes.length; i++) {
-        container.removeChild(childNodes[i]);
+    var length = childNodes.length; // 得拿出来，length也在变
+    for (var i = 0; i < length; i++) {
+        container.removeChild(childNodes[0]); // 删除时index在变，不能用i
     }
-}
-
-function removeTasks() {
-    var container = document.getElementById('coder');
 }
 
 function renderTasks() {
@@ -179,7 +180,7 @@ function Coder(name) {
     this.getAllTime = function () {
         var sum = 0;
         for (var i = 0; i < this.ownTaskList.length; i++) {
-            sum += this.ownTaskList[i].hour; // 这个是字符串相加还是数字？
+            sum += this.ownTaskList[i].hour; // 这个是字符串相加还是数字？是字符串！
         }
         return sum;
     };
@@ -193,7 +194,7 @@ function Coder(name) {
 
     this.unbind = function (task) {
         if (contains(this.ownTaskList, task)) {
-            this.ownTaskList = removeByObj(this.ownTaskList, task);
+            removeByObj(this.ownTaskList, task);
             task.unbind();
         }
     };
@@ -236,7 +237,8 @@ function readFile(filename) {
 function removeByObj(array, obj) {
     for (var i = 0; i < array.length; i++) {
         if (array[i] === obj) {
-            return array.splice(i, 1);
+            array.splice(i, 1);
+            break;
         }
     }
 }
