@@ -35,7 +35,6 @@ function renderTaskGroup(taskGroup) {
             ownerName = taskGroup[i].owner.name;
         }
         child.innerHTML = taskGroup[i].name + ":" + taskGroup[i].hour + "h -> " + ownerName;
-
         child.style.padding = 5;
 
         child.onmouseover = function () {
