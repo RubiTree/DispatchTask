@@ -1,63 +1,71 @@
 <body>
-  <div id="toolbar">
+
+<div id="body">
+<div id="toolbar">
     <button type="button" onclick="inputTask()">导入task</button>
     <button type="button" onclick="inputCoder()">导入coder</button>
     <button type="button" onclick="output()">导出</button>
-  </div>
+</div>
 
-  <div id="panel">
-    <div id="task">
+<div id="panel">
+    <div id="task"></div>
+    <div id="coder"></div>
+</div>
 
-    </div>
-
-    <div id="coder">
-
-    </div>
-  </div>
-
-  <div id="console">
-
-  </div>
+<div id="console"></div>
+</div>
 </body>
 
+
 <style type="text/css">
-  #toolbar {
-    left: 0px;
-    right: 0px;
-    height: 50px;
-    background-color: lightgrey;
-    padding: 10px;
-    text-align: center;
-  }
+    #body{
+        left: 0;
+        right: 0;
+    }
 
-  #panel {
-    left: 0px;
-    right: 0px;
-    height: 800px;
-  }
+    #toolbar {
+        left: 0;
+        right: 0;
+        height: 50px;
+        background-color: lightgrey;
+        padding: 10px;
+        text-align: center;
+        max-width:780px;
+    }
 
-  #task {
-    width: 80%;
-    height: 100%;
-    float: left;
-    background-color: lightgreen;
-    overflow-y:scroll;
-  }
+    #panel {
+        left: 0;
+        right: 0;
+        height: 800px;
+        max-width:800px
+    }
 
-  #coder {
-    width: 20%;
-    height: 100%;
-    float: left;
-    background-color: lightblue;
-    overflow-y:scroll;
-  }
+    #task {
+        width: 80%;
+        height: 100%;
+        float: left;
+        background-color: lightgreen;
+        overflow-y: scroll;
+    }
 
-  #console {
-    left: 0px;
-    right: 0px;
-    height: 50px;
-    background-color: yellow;
-  }
+    #coder {
+        width: 20%;
+        height: 100%;
+        float: left;
+        background-color: lightblue;
+        overflow-y: scroll;
+    }
+
+    #console {
+        left: 0;
+        right: 0;
+        height: 150px;
+        background-color: yellow;
+        overflow-y: scroll;
+        padding: 10px;
+        text-align: center;
+        max-width:780px;
+    }
 </style>
 
 <script src="main.js">
