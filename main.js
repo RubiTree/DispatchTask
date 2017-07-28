@@ -7,7 +7,8 @@ var currentChooseCoder = null;
 //-------------------------------------------------------------------------------------------//
 
 function inputTask() {
-    initTasksData(prompt("inputTask"));
+    // initTasksData(prompt("inputTask"));
+    initTasksData(document.getElementById('input_task_area').value); // 不是自动提示的textContent
     renderTaskGroup(leftTaskList);
 }
 
@@ -87,7 +88,8 @@ function renderTaskGroup(taskGroup) {
 //-------------------------------------------------------------------------------------------//
 
 function inputCoder() {
-    initCodersData(prompt("inputCoder"));
+    // initCodersData(prompt("inputCoder"));
+    initCodersData(document.getElementById('input_coder_area').value);
     renderCoders();
 }
 
@@ -213,7 +215,7 @@ function getOneCoderTaskInfo(coder) {
 
 function getUnDispatchedTaskInfo() {
     if (leftTaskList.length !== 0) {
-        var coder = new Coder("<br /><br />未分配任务 ");
+        var coder = new Coder("<br />未分配任务 ");
         coder.ownTaskList = leftTaskList;
         return getOneCoderTaskInfo(coder);
     } else {
@@ -222,7 +224,8 @@ function getUnDispatchedTaskInfo() {
 }
 
 function copyToClipboard(txt) {
-    document.getElementById("console").innerHTML = txt;
+    txt=replaceAll(txt,'<br />','\n'); // 使用textarea时需要转，使用prompt则不用
+    document.getElementById("output_area").innerHTML = txt;
 }
 
 //-------------------------------------------------------------------------------------------//
@@ -302,4 +305,8 @@ function contains(array, obj) {
         if (array[i] === obj) return true;
     }
     return false;
+}
+
+function replaceAll(source,oldString,newString){
+    return source.replace(new RegExp(oldString,"gm"),newString);
 }
