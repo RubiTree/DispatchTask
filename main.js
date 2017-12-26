@@ -4,6 +4,8 @@ var coderList = [];
 var currentChooseTask = null;
 var currentChooseCoder = null;
 
+var scaleFactor = 1;
+
 //-------------------------------------------------------------------------------------------//
 
 function inputTask() {
@@ -39,7 +41,7 @@ function renderTaskGroup(taskGroup) {
         if (taskGroup[i].owner !== null) {
             ownerName = taskGroup[i].owner.name;
         }
-        child.innerHTML = taskGroup[i].name + " : " + taskGroup[i].hour + "h -> " + ownerName;
+        child.innerHTML = taskGroup[i].name + " : " + taskGroup[i].hour*scaleFactor + "h -> " + ownerName;
         child.style.padding = 10;
 
         child.onmouseover = function () {
@@ -108,7 +110,7 @@ function renderCoders() {
     var container = document.getElementById('coder');
     for (var i = 0; i < coderList.length; i++) {
         var child = document.createElement('div');
-        child.innerHTML = coderList[i].name + " : " + coderList[i].getAllTime() + "h";
+        child.innerHTML = coderList[i].name + " : " + coderList[i].getAllTime()*scaleFactor + "h";
         child.style.padding = 10;
 
         child.onmouseover = function () {
@@ -203,9 +205,9 @@ function getDispatchedTaskInfo() {
 
 function getOneCoderTaskInfo(coder) {
     if (coder.ownTaskList.length !== 0) {
-        var result = coder.name + " (" + coder.getAllTime() + "h)<br />";
+        var result = coder.name + " (" + coder.getAllTime()*scaleFactor + "h)<br />";
         for (var i = 0; i < coder.ownTaskList.length; i++) {
-            result += coder.ownTaskList[i].name + " - " + coder.ownTaskList[i].hour + "h<br />";
+            result += coder.ownTaskList[i].name + " - " + coder.ownTaskList[i].hour*scaleFactor + "h<br />";
         }
         return result + "<br />";
     } else {
@@ -226,6 +228,14 @@ function getUnDispatchedTaskInfo() {
 function copyToClipboard(txt) {
     txt=replaceAll(txt,'<br />','\n'); // 使用textarea时需要转，使用prompt则不用
     document.getElementById("output_area").innerHTML = txt;
+}
+
+//-------------------------------------------------------------------------------------------//
+
+function setScaleFactor(){
+  scaleFactor = document.getElementById('input_scale_factor_area').value;
+
+  update();
 }
 
 //-------------------------------------------------------------------------------------------//
