@@ -242,11 +242,21 @@ function setScaleFactor(){
 
 function updateTotalTime(){
   var sum = 0;
-  for (var i = 0; i < leftTaskList.length; i++) {
-    sum += leftTaskList[i].hour;
+  sum += getTaskGroupTotalTime(leftTaskList);
+
+  for (var i = 0; i < coderList.length; i++) {
+      sum += getTaskGroupTotalTime(coderList[i].ownTaskList);
   }
 
   document.getElementById("total_time").innerHTML = ((sum*scaleFactor).toFixed(1)+ "h");
+}
+
+function getTaskGroupTotalTime(taskGroup){
+  var sum = 0;
+  for (var i = 0; i < taskGroup.length; i++) {
+    sum += taskGroup[i].hour;
+  }
+  return sum;
 }
 
 //-------------------------------------------------------------------------------------------//
