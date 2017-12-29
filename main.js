@@ -12,6 +12,7 @@ function inputTask() {
     // initTasksData(prompt("inputTask"));
     initTasksData(document.getElementById('input_task_area').value); // 不是自动提示的textContent
     renderTaskGroup(leftTaskList);
+    updateTotalTime();
 }
 
 function initTasksData(tasksText) {
@@ -41,7 +42,7 @@ function renderTaskGroup(taskGroup) {
         if (taskGroup[i].owner !== null) {
             ownerName = taskGroup[i].owner.name;
         }
-        child.innerHTML = taskGroup[i].name + " : " + taskGroup[i].hour*scaleFactor + "h -> " + ownerName;
+        child.innerHTML = taskGroup[i].name + " : " + (taskGroup[i].hour*scaleFactor).toFixed(1) + "h -> " + ownerName;
         child.style.padding = 10;
 
         child.onmouseover = function () {
@@ -110,7 +111,7 @@ function renderCoders() {
     var container = document.getElementById('coder');
     for (var i = 0; i < coderList.length; i++) {
         var child = document.createElement('div');
-        child.innerHTML = coderList[i].name + " : " + coderList[i].getAllTime()*scaleFactor + "h";
+        child.innerHTML = coderList[i].name + " : " + (coderList[i].getAllTime()*scaleFactor).toFixed(1) + "h";
         child.style.padding = 10;
 
         child.onmouseover = function () {
@@ -205,9 +206,9 @@ function getDispatchedTaskInfo() {
 
 function getOneCoderTaskInfo(coder) {
     if (coder.ownTaskList.length !== 0) {
-        var result = coder.name + " (" + coder.getAllTime()*scaleFactor + "h)<br />";
+        var result = coder.name + " (" + (coder.getAllTime()*scaleFactor).toFixed(1) + "h)<br />";
         for (var i = 0; i < coder.ownTaskList.length; i++) {
-            result += coder.ownTaskList[i].name + " - " + coder.ownTaskList[i].hour*scaleFactor + "h<br />";
+            result += coder.ownTaskList[i].name + " - " + (coder.ownTaskList[i].hour*scaleFactor).toFixed(1) + "h<br />";
         }
         return result + "<br />";
     } else {
@@ -236,6 +237,16 @@ function setScaleFactor(){
   scaleFactor = document.getElementById('input_scale_factor_area').value;
 
   update();
+  updateTotalTime();
+}
+
+function updateTotalTime(){
+  var sum = 0;
+  for (var i = 0; i < leftTaskList.length; i++) {
+    sum += leftTaskList[i].hour;
+  }
+
+  document.getElementById("total_time").innerHTML = (sum*scaleFactor).toFixed(1);
 }
 
 //-------------------------------------------------------------------------------------------//

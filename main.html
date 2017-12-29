@@ -12,10 +12,14 @@
         <button type="button" onclick="output()">导出</button>
     </div>
 
-    <div id="toolbar">
+    <div id="sub_toolbar">
         <font size="1.5">脑子进水系数：</font>
         <input type="text" id="input_scale_factor_area" value="1"/>
         <button type="button" onclick="setScaleFactor()">设置</button>
+
+        <font size="0.01">............</font>
+        <font size="1.5">总时间:</font>
+        <font size="1.5" id="total_time" value="0"></font>
     </div>
 
     <div id="textarea">
@@ -62,6 +66,16 @@ task 7</textarea>
         left: 0;
         right: 0;
         height: 20px;
+        background-color: lightgrey;
+        padding: 10px;
+        text-align: center;
+        max-width: 780px;
+    }
+
+    #sub_toolbar {
+        left: 0;
+        right: 0;
+        height: 10px;
         background-color: lightgrey;
         padding: 10px;
         text-align: center;
