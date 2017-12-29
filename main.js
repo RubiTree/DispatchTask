@@ -246,7 +246,7 @@ function updateTotalTime(){
     sum += leftTaskList[i].hour;
   }
 
-  document.getElementById("total_time").innerHTML = (sum*scaleFactor).toFixed(1);
+  document.getElementById("total_time").innerHTML = ((sum*scaleFactor).toFixed(1)+ "h");
 }
 
 //-------------------------------------------------------------------------------------------//
