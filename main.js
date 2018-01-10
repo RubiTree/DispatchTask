@@ -206,11 +206,14 @@ function getDispatchedTaskInfo() {
 
 function getOneCoderTaskInfo(coder) {
     if (coder.ownTaskList.length !== 0) {
-        var result = coder.name + " (" + (coder.getAllTime()*scaleFactor).toFixed(1) + "h)<br />";
+        var result = "";
+        var allTime = 0;
         for (var i = 0; i < coder.ownTaskList.length; i++) {
-            result += coder.ownTaskList[i].name + " - " + (coder.ownTaskList[i].hour*scaleFactor).toFixed(1) + "h<br />";
+            var singleTaskScaleTime = (coder.ownTaskList[i].hour*scaleFactor).toFixed();
+            allTime = parseInt(singleTaskScaleTime) + parseInt(allTime);
+            result += coder.ownTaskList[i].name + " - " + singleTaskScaleTime + "h<br />";
         }
-        return result + "<br />";
+        return coder.name + " (" + allTime + "h)<br />" + result + "<br />";
     } else {
         return "";
     }
